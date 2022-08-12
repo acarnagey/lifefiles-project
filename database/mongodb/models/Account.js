@@ -34,7 +34,7 @@ var AccountSchema = new mongoose.Schema(
     role: String,
     permanentOrgArchiveNumber: String,
     didAddress: String,
-    didPublicEncryptionKey: String,
+    didPublicEncryptionKey: mongoose.Schema.Types.Mixed,
     didPrivateKeyGuid: String,
     canAddOtherAccounts: Boolean,
     signMessage: String,

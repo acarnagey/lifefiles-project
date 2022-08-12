@@ -26,7 +26,7 @@ if (process.env.ENVIRONMENT !== "DEVELOPMENT") {
 
 const passport = `${__dirname}/testFiles/passport.png`;
 
-describe("Mypass Integration Tests", function() {
+describe.skip("Mypass Integration Tests", function() {
   describe("#User Flows", function() {
     it("should return document types", function(done) {
       request("http://localhost:5000/api/")

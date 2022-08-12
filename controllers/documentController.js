@@ -2,7 +2,7 @@ const common = require("../common/common");
 const documentStorageHelper = require("../common/documentStorageHelper");
 const permanent = require("../common/permanentClient");
 const secureKeyStorage = require("../common/secureKeyStorage");
-const EthCrypto = require("eth-crypto");
+// const EthCrypto = require("eth-crypto");
 
 module.exports = {
   updateDocument: async (req, res, next) => {
@@ -130,7 +130,7 @@ module.exports = {
       permanentOrgFileArchiveNumber,
       file.md5,
       req.body.validuntildate,
-      req.body.encryptionPubKey
+      JSON.parse(req.body.encryptionPubKey)
     );
 
     res.status(200).json({
@@ -328,7 +328,7 @@ module.exports = {
 
   generateNewDid: async (req, res) => {
     const did = await common.blockchainClient.createNewDID();
-    await secureKeyStorage.storeToDb(did.address, did.privateKey);
+    await secureKeyStorage.storeToDb(did.address, JSON.stringify(did.privateKey));
     res.status(200).json({ didAddress: did.address });
   },
 
@@ -403,9 +403,9 @@ module.exports = {
       const expirationDate = new Date(vcUnpacked.payload.vc.expirationDate);
       const validityTimeSeconds = Math.round((expirationDate - now) / 1000);
 
-      const documentDidPrivateKey = await secureKeyStorage.retrieveFromDb(
+      const documentDidPrivateKey = JSON.parse(await secureKeyStorage.retrieveFromDb(
         documentDidAddress
-      );
+      ));
 
       let didUrl = "";
 
@@ -471,9 +471,9 @@ module.exports = {
     const expirationDate = new Date(vcUnpacked.payload.vc.expirationDate);
     const validityTimeSeconds = Math.round((expirationDate - now) / 1000);
 
-    const documentDidPrivateKey = await secureKeyStorage.retrieveFromDb(
+    const documentDidPrivateKey = JSON.parse(await secureKeyStorage.retrieveFromDb(
       documentDidAddress
-    );
+    ));
 
     let didUrl = "";
 

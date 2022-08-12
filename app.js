@@ -34,19 +34,19 @@ const https = require("https");
 // Set Up Clients.
 const dbClient = new MongoDbClient();
 
-if (process.env.ETH_FUNDING_PRIVATE_KEY !== undefined) {
-  const UportClient = require("./services/blockchain/UportClient");
-  const blockchainClient = new UportClient();
-  common.blockchainClient = blockchainClient;
+// if (process.env.ETH_FUNDING_PRIVATE_KEY !== undefined) {
+//   const UportClient = require("./services/blockchain/UportClient");
+//   const blockchainClient = new UportClient();
+//   common.blockchainClient = blockchainClient;
 
-  const RskBlockchainClient = require("./services/blockchain/RskBlockchainClient");
-  const rsk = new RskBlockchainClient();
-  common.rskClient = rsk;
-} else {
-  const SimpleBlockchainClient = require("./services/blockchain/SimpleBlockchainClient");
-  const blockchainClient = new SimpleBlockchainClient();
-  common.blockchainClient = blockchainClient;
-}
+//   const RskBlockchainClient = require("./services/blockchain/RskBlockchainClient");
+//   const rsk = new RskBlockchainClient();
+//   common.rskClient = rsk;
+// } else {
+const SimpleBlockchainClient = require("./services/blockchain/SimpleBlockchainClient");
+const blockchainClient = new SimpleBlockchainClient();
+common.blockchainClient = blockchainClient;
+// }
 
 common.dbClient = dbClient;
 

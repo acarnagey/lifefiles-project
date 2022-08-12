@@ -21,7 +21,7 @@ module.exports = {
       data[guid] = key;
       safe.encrypt(data);
     } else {
-      return module.exports.storeToDb(guid, key);
+      return module.exports.storeToDb(guid, JSON.stringify(key));
     }
   },
   retrieve: async (guid) => {
@@ -29,7 +29,7 @@ module.exports = {
       let data = safe.decrypt();
       return data[guid];
     } else {
-      return module.exports.retrieveFromDb(guid);
+      return JSON.parse(module.exports.retrieveFromDb(guid));
     }
   },
 

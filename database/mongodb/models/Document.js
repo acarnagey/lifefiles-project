@@ -12,7 +12,7 @@ var DocumentSchema = new mongoose.Schema(
     vcJwt: String,
     vpJwt: String,
     type: String,
-    encryptionPubKey: String,
+    encryptionPubKey: mongoose.Schema.Types.Mixed,
     permanentOrgFileArchiveNumber: String,
     validUntilDate: Date,
     claimed: Boolean,

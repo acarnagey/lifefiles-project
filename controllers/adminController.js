@@ -2,7 +2,7 @@ const common = require("../common/common");
 const permanent = require("../common/permanentClient");
 const uuidv4 = require("uuid").v4;
 const secureKeyStorage = require("../common/secureKeyStorage");
-const EthCrypto = require("eth-crypto");
+// const EthCrypto = require("eth-crypto");
 const passport = require("passport");
 const documentStorageHelper = require("../common/documentStorageHelper");
 
@@ -32,7 +32,7 @@ module.exports = {
 
   saveAdminAccount: async (req, res, next) => {
     try {
-      const {email, password} = {...req.body};
+      const { email, password } = { ...req.body };
       const account = await common.dbClient.saveAdminAccount(email, password);
       return res.status(200).json({ account });
     } catch (err) {
@@ -164,9 +164,7 @@ module.exports = {
       accountRequest.password = uuidv4();
     } else {
       did = await common.blockchainClient.createNewDID();
-      did.publicEncryptionKey = EthCrypto.publicKeyByPrivateKey(
-        "0x" + did.privateKey
-      );
+      did.publicEncryptionKey = did.publicKey;
       did.privateKeyGuid = uuid;
     }
 
@@ -238,9 +236,7 @@ module.exports = {
     const uuid = uuidv4();
 
     let did = await common.blockchainClient.createNewDID();
-    did.publicEncryptionKey = EthCrypto.publicKeyByPrivateKey(
-      "0x" + did.privateKey
-    );
+    did.publicEncryptionKey = did.publicKey;
     did.privateKeyGuid = uuid;
 
     await secureKeyStorage.store(uuid, did.privateKey);
@@ -341,22 +337,22 @@ module.exports = {
   setPrivateKey: async (req, res, next) => {
     const adminAccountId = req.payload.id;
     const adminAccount = await common.dbClient.getAccountById(adminAccountId);
+    res.status(404).json({ message: "not supported yet" });
+    // if (adminAccount.role !== "admin") {
+    //   res.status(403).json({
+    //     error: "Account not authorized to hit this route",
+    //   });
+    //   return;
+    // }
 
-    if (adminAccount.role !== "admin") {
-      res.status(403).json({
-        error: "Account not authorized to hit this route",
-      });
-      return;
-    }
-
-    let privateKey = req.body.privateKey;
-    if (privateKey.substring(0, 2) !== "0x") {
-      // Add 0x if it does not have it
-      privateKey = "0x" + privateKey;
-    }
-    const publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
-    const address = EthCrypto.publicKey.toAddress(publicKey);
-    common.dbClient.setAdminPrivateKey(address, privateKey);
+    // let privateKey = req.body.privateKey;
+    // if (privateKey.substring(0, 2) !== "0x") {
+    //   // Add 0x if it does not have it
+    //   privateKey = "0x" + privateKey;
+    // }
+    // const publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+    // const address = EthCrypto.publicKey.toAddress(publicKey);
+    // common.dbClient.setAdminPrivateKey(address, privateKey);
 
     res.status(201).json({ msg: "success" });
   },
@@ -391,7 +387,8 @@ module.exports = {
   },
 
   getRolePermissionTable: async (req, res, next) => {
-    const rolePermissionTable = await common.dbClient.getLatestRoleLPermissionTable();
+    const rolePermissionTable =
+      await common.dbClient.getLatestRoleLPermissionTable();
     return res.status(200).json({ rolePermissionTable: rolePermissionTable });
   },
 
