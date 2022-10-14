@@ -405,7 +405,7 @@ module.exports = {
 
       const documentDidPrivateKey = JSON.parse(await secureKeyStorage.retrieveFromDb(
         documentDidAddress
-      ));
+      )).privateKey;
 
       let didUrl = "";
 
@@ -473,7 +473,7 @@ module.exports = {
 
     const documentDidPrivateKey = JSON.parse(await secureKeyStorage.retrieveFromDb(
       documentDidAddress
-    ));
+    )).privateKey;
 
     let didUrl = "";
 

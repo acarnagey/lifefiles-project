@@ -5,7 +5,7 @@ const passport = require("passport");
 const fs = require("fs");
 const permanent = require("../common/permanentClient");
 const uuidv4 = require("uuid").v4;
-// const EthCrypto = require("eth-crypto");
+const EthCrypto = require("eth-crypto");
 const smsUtil = require("../common/smsUtil");
 
 module.exports = {
@@ -206,11 +206,10 @@ module.exports = {
       res.status(200).json({ messageToSign: messageToSignUuid });
     }
 
-    // const signer = EthCrypto.recover(
-    //   req.body.account.signature,
-    //   EthCrypto.hash.keccak256(account.signMessage) // signed message hash
-    // );
-    signer = "";
+    const signer = EthCrypto.recover(
+      req.body.account.signature,
+      EthCrypto.hash.keccak256(account.signMessage) // signed message hash
+    );
 
     if (
       req.body.account.username.toLowerCase() ===

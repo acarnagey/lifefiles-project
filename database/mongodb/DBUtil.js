@@ -1,6 +1,4 @@
-// const EthCrypto = require("eth-crypto");
-
-const SimpleBlockchainClient = require("../../services/blockchain/SimpleBlockchainClient");
+const EthCrypto = require("eth-crypto");
 
 class DBUtil {
   static async populateDefaultValues(mongoDbInstance, secureKeyStorage) {
@@ -377,10 +375,15 @@ class DBUtil {
           organization: "-",
         },
       };
-      const newDID = await new SimpleBlockchainClient().createNewDID();
       let adminDid = {
         did: {
-          ...newDID,
+          address: "0xD19834a92604Fe21A8E5631F755aEC7d63Cb4b1c",
+          publicEncryptionKey: EthCrypto.publicKeyByPrivateKey(
+            "0x" +
+              "0daf9bae0e6f9069e012973daf82c404d373b5da8a6cbaa590133faf8be2d017"
+          ),
+          privateKey:
+            "0daf9bae0e6f9069e012973daf82c404d373b5da8a6cbaa590133faf8be2d017",
           privateKeyGuid: "1d9ac500-ba5d-4c80-ae9a-45a3098e19ea",
         },
       };
@@ -404,16 +407,15 @@ class DBUtil {
     ) {
       console.log("Adding admin key from env var to db");
 
-      // const publicKey = EthCrypto.publicKeyByPrivateKey(
-      //   process.env.ETH_FUNDING_PRIVATE_KEY
-      // );
+      const publicKey = EthCrypto.publicKeyByPrivateKey(
+        process.env.ETH_FUNDING_PRIVATE_KEY
+      );
 
-      // const address = EthCrypto.publicKey.toAddress(publicKey);
-      const newDID = await new SimpleBlockchainClient().createNewDID();
+      const address = EthCrypto.publicKey.toAddress(publicKey);
 
       await mongoDbInstance.setAdminPrivateKey(
-        newDID.address,
-        newDID.privateKey
+        address,
+        process.env.ETH_FUNDING_PRIVATE_KEY
       );
     }
 
@@ -471,13 +473,15 @@ class DBUtil {
           organization: "Banana Org",
         },
       };
-      const newDID = await new SimpleBlockchainClient().createNewDID();
-
       let caseWorkerDid = {
         did: {
           address: "0x2a6F1D5083fb19b9f2C653B598abCb5705eD0439",
-          publicEncryptionKey: newDID.publicKey,
-          privateKey: newDID.privateKey,
+          publicEncryptionKey: EthCrypto.publicKeyByPrivateKey(
+            "0x" +
+              "8ef83de6f0ccf32798f8afcd436936870af619511f2385e8aace87729e771a8b"
+          ),
+          privateKey:
+            "8ef83de6f0ccf32798f8afcd436936870af619511f2385e8aace87729e771a8b",
           privateKeyGuid: "53d9269b-a90b-423e-be17-e2a6517790b1",
         },
       };
@@ -507,13 +511,15 @@ class DBUtil {
           organization: "Apple Org",
         },
       };
-      const newDID2 = await new SimpleBlockchainClient().createNewDID();
-
       let caseWorkerDidTwo = {
         did: {
           address: "0x0F4FBead5219388CD71FAa2bbd63C26Aad0ae2c5",
-          publicEncryptionKey: newDID2.publicKey,
-          privateKey: newDID2.privateKey,
+          publicEncryptionKey: EthCrypto.publicKeyByPrivateKey(
+            "0x" +
+              "403c9b0e55db5ff1434d07711baa34d76eecc2723cdb599a42f5f2cbf6fd3262"
+          ),
+          privateKey:
+            "403c9b0e55db5ff1434d07711baa34d76eecc2723cdb599a42f5f2cbf6fd3262",
           privateKeyGuid: "6ee64b8e-0623-4cad-8162-26e49e74b2dc",
         },
       };
@@ -543,13 +549,15 @@ class DBUtil {
           organization: "Pear Org",
         },
       };
-      const newDID3 = await new SimpleBlockchainClient().createNewDID();
-
       let caseWorkerDidThree = {
         did: {
           address: "0x56bf6887202d8aa6Df4Bc312e866E955FE0FC9aD",
-          publicEncryptionKey: newDID3.publicKey,
-          privateKey: newDID3.privateKey,
+          publicEncryptionKey: EthCrypto.publicKeyByPrivateKey(
+            "0x" +
+              "a2bf1a07ccb785b7baf041dc0135ae9bfbf049bd36068777e4796185fe1ff5c0"
+          ),
+          privateKey:
+            "a2bf1a07ccb785b7baf041dc0135ae9bfbf049bd36068777e4796185fe1ff5c0",
           privateKeyGuid: "22161991-55f9-45fc-b6c5-de8e339701f1",
         },
       };

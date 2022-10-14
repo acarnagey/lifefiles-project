@@ -2,7 +2,7 @@ const common = require("../common/common");
 const permanent = require("../common/permanentClient");
 const uuidv4 = require("uuid").v4;
 const secureKeyStorage = require("../common/secureKeyStorage");
-// const EthCrypto = require("eth-crypto");
+const EthCrypto = require("eth-crypto");
 const passport = require("passport");
 const documentStorageHelper = require("../common/documentStorageHelper");
 
@@ -337,22 +337,22 @@ module.exports = {
   setPrivateKey: async (req, res, next) => {
     const adminAccountId = req.payload.id;
     const adminAccount = await common.dbClient.getAccountById(adminAccountId);
-    res.status(404).json({ message: "not supported yet" });
-    // if (adminAccount.role !== "admin") {
-    //   res.status(403).json({
-    //     error: "Account not authorized to hit this route",
-    //   });
-    //   return;
-    // }
+    // res.status(404).json({ message: "not supported yet" });
+    if (adminAccount.role !== "admin") {
+      res.status(403).json({
+        error: "Account not authorized to hit this route",
+      });
+      return;
+    }
 
-    // let privateKey = req.body.privateKey;
-    // if (privateKey.substring(0, 2) !== "0x") {
-    //   // Add 0x if it does not have it
-    //   privateKey = "0x" + privateKey;
-    // }
-    // const publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
-    // const address = EthCrypto.publicKey.toAddress(publicKey);
-    // common.dbClient.setAdminPrivateKey(address, privateKey);
+    let privateKey = req.body.privateKey;
+    if (privateKey.substring(0, 2) !== "0x") {
+      // Add 0x if it does not have it
+      privateKey = "0x" + privateKey;
+    }
+    const publicKey = EthCrypto.publicKeyByPrivateKey(privateKey);
+    const address = EthCrypto.publicKey.toAddress(publicKey);
+    common.dbClient.setAdminPrivateKey(address, privateKey);
 
     res.status(201).json({ msg: "success" });
   },
